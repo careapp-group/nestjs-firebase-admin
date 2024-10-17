@@ -7,7 +7,7 @@ import {
 } from 'firebase-admin/lib/remote-config/remote-config-api';
 
 @Injectable()
-export class FirebaseRemoteConfigService implements Partial<admin.remoteConfig.RemoteConfig> {
+export class FirebaseRemoteConfigService {
   constructor(public readonly app: admin.app.App) {}
 
   getServerTemplate(options?: GetServerTemplateOptions): Promise<ServerTemplate> {

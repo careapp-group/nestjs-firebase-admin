@@ -5,7 +5,7 @@ import { ProjectConfigManager } from 'firebase-admin/lib/auth/project-config-man
 import { DecodedAuthBlockingToken } from 'firebase-admin/lib/auth/token-verifier';
 
 @Injectable()
-export class FirebaseAuthenticationService implements Partial<admin.auth.Auth> {
+export class FirebaseAuthenticationService {
   constructor(public readonly app: admin.app.App) {}
 
   get auth() {
