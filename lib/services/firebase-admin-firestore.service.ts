@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 @Injectable()
-export class FirebaseFirestoreService implements FirebaseFirestore.Firestore {
+export class FirebaseFirestoreService implements Partial<FirebaseFirestore.Firestore> {
   constructor(public readonly app: admin.app.App) {}
 
   get firestore() {

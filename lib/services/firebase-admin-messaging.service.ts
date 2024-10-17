@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { Message, BatchResponse, MulticastMessage } from 'firebase-admin/lib/messaging/messaging-api';
 
 @Injectable()
-export class FirebaseMessagingService implements admin.messaging.Messaging {
+export class FirebaseMessagingService implements Partial<admin.messaging.Messaging> {
   constructor(public readonly app: admin.app.App) {}
 
   get messaging() {
@@ -10,6 +11,21 @@ export class FirebaseMessagingService implements admin.messaging.Messaging {
       throw new Error('Firebase instance is undefined.');
     }
     return this.app.messaging();
+  }
+
+  /**
+   @deprecated: This will be removed when the HTTP/2 transport implementation reaches the same stability as the legacy HTTP/1.1 implementation.
+   */
+  enableLegacyHttpTransport(): void {
+    return this.messaging.enableLegacyHttpTransport();
+  }
+
+  sendEach(messages: Message[], dryRun?: boolean): Promise<BatchResponse> {
+    return this.messaging.sendEach(messages, dryRun);
+  }
+
+  sendEachForMulticast(message: MulticastMessage, dryRun?: boolean): Promise<BatchResponse> {
+    return this.messaging.sendEachForMulticast(message, dryRun);
   }
 
   send(message: admin.messaging.Message, dryRun?: boolean): Promise<string> {
