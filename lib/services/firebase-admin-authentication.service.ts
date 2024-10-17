@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { ActionCodeSettings } from 'firebase-admin/lib/auth/action-code-settings-builder';
+import { ProjectConfigManager } from 'firebase-admin/lib/auth/project-config-manager';
+import { DecodedAuthBlockingToken } from 'firebase-admin/lib/auth/token-verifier';
 
 @Injectable()
-export class FirebaseAuthenticationService implements admin.auth.Auth {
+export class FirebaseAuthenticationService implements Partial<admin.auth.Auth> {
   constructor(public readonly app: admin.app.App) {}
 
   get auth() {
@@ -10,6 +13,22 @@ export class FirebaseAuthenticationService implements admin.auth.Auth {
       throw new Error('Firebase instance is undefined.');
     }
     return this.app.auth();
+  }
+
+  projectConfigManager(): ProjectConfigManager {
+    return this.auth.projectConfigManager();
+  }
+
+  generateVerifyAndChangeEmailLink(
+    email: string,
+    newEmail: string,
+    actionCodeSettings?: ActionCodeSettings,
+  ): Promise<string> {
+    return this.auth.generateVerifyAndChangeEmailLink(email, newEmail, actionCodeSettings);
+  }
+
+  _verifyAuthBlockingToken(token: string, audience?: string): Promise<DecodedAuthBlockingToken> {
+    return this.auth._verifyAuthBlockingToken(token, audience);
   }
 
   tenantManager(): admin.auth.TenantManager {

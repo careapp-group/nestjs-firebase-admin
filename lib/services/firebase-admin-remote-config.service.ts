@@ -1,9 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import {
+  GetServerTemplateOptions,
+  ServerTemplate,
+  InitServerTemplateOptions,
+} from 'firebase-admin/lib/remote-config/remote-config-api';
 
 @Injectable()
-export class FirebaseRemoteConfigService implements admin.remoteConfig.RemoteConfig {
+export class FirebaseRemoteConfigService implements Partial<admin.remoteConfig.RemoteConfig> {
   constructor(public readonly app: admin.app.App) {}
+
+  getServerTemplate(options?: GetServerTemplateOptions): Promise<ServerTemplate> {
+    return this.remoteConfig.getServerTemplate(options);
+  }
+  initServerTemplate(options?: InitServerTemplateOptions): ServerTemplate {
+    return this.remoteConfig.initServerTemplate(options);
+  }
 
   get remoteConfig() {
     if (!this.app) {
